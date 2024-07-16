@@ -5,52 +5,53 @@ class Helper {
   letterCount: number;
   spaceCount: number;
   totalWords: number ;
-  wordsCount: {[key:string]: number};
+  words: [] | [string];
 
   constructor (text: string) {
     this.text = text;
     this.letterCount = 0
     this.spaceCount = 0
     this.totalWords = 0
-    this.wordsCount = {}
+    this.words = []
   }
 
   readText(): void {
-    // [...this.text.split('')].forEach((token) => {
-    //   console.log(token)
-    // })
     if (this.text.length < 1) return
 
     let start = 0
-    let movingIndex = start + 1 
+    let movingIndex = start  
 
-    while (movingIndex < this.text.length) {
+    const stopValue = this.text.length - 1 
+
+    while (movingIndex <= stopValue) {
       
       const character = this.text[movingIndex]
+      console.log(`procesing character ${character}`)
+
+
+      if (character === ' ') {
+        start ++
+        this.spaceCount ++
+        movingIndex ++
+        continue
+      }
 
       if (isAlpha(character)) {
         this.letterCount ++
         movingIndex ++
+        const nextChar = this.text[movingIndex]
+        if (nextChar !== ' ' && nextChar !== undefined ) continue
+        const wordFound = this.text.slice(start, movingIndex)
+        console.log(wordFound)
+        this.totalWords ++
+        start = movingIndex
         continue
       }
 
       if (isNumeric(character)) {
-        start = movingIndex + 1
         movingIndex ++
-        continue
+        start = movingIndex
       }
-
-      const isWhiteSpace = character === ' '
-
-      if (isWhiteSpace) {
-        this.spaceCount ++
-      }
-
-      const wordFound = this.text.slice(start, movingIndex)
-      console.log(wordFound)
-      start = movingIndex + 1
-      movingIndex ++
-      this.pushToWordCount(wordFound)
 
     }
   }
@@ -59,13 +60,12 @@ class Helper {
     console.log(`total n. of letters ${this.letterCount}`)
     console.log(`total n. of white spaces ${this.spaceCount}`)
     console.log(`total n. of words ${this.totalWords}`)
-    console.log(`most common words ${JSON.stringify(this.wordsCount)}`)
+    // console.log(`most common words ${JSON.stringify(this.wordsCount)}`)
   }
 
-  pushToWordCount(word: string): void {
-    this.wordsCount[word] > 0 ? this.wordsCount[word] ++ : this.wordsCount[word] = 1
-    console.log(this.wordsCount)
-  }
+  // pushToWordCount(word: string): void {
+  //   this.wordsCount[word] > 0 ? this.wordsCount[word] ++ : this.wordsCount[word] = 1
+  // }
 
   computeWord(word: string): void {
 
@@ -73,7 +73,7 @@ class Helper {
 
 }
 
-const helper = new Helper('this is my test test testasd test 4 rw')
+const helper = new Helper('this is my test test tosted test 4 rw')
 helper.readText()
 helper.printReport()
 
