@@ -4,12 +4,14 @@ class Helper {
   text: string;
   letterCount: number;
   spaceCount: number;
+  totalWords: number ;
   wordsCount: {[key:string]: number};
 
   constructor (text: string) {
     this.text = text;
     this.letterCount = 0
     this.spaceCount = 0
+    this.totalWords = 0
     this.wordsCount = {}
   }
 
@@ -32,7 +34,15 @@ class Helper {
         continue
       }
 
-      if (character === ' ') {
+      if (isNumeric(character)) {
+        start = movingIndex + 1
+        movingIndex ++
+        continue
+      }
+
+      const isWhiteSpace = character === ' '
+
+      if (isWhiteSpace) {
         this.spaceCount ++
       }
 
@@ -48,16 +58,17 @@ class Helper {
   printReport(): void {
     console.log(`total n. of letters ${this.letterCount}`)
     console.log(`total n. of white spaces ${this.spaceCount}`)
-    console.log(`total n. of words ${JSON.stringify(this.wordsCount)}`)
+    console.log(`total n. of words ${this.totalWords}`)
+    console.log(`most common words ${JSON.stringify(this.wordsCount)}`)
   }
 
   pushToWordCount(word: string): void {
-    if (this.wordsCount[word] > 0) {
-      this.wordsCount[word] ++
-    } else {
-      this.wordsCount[word] = 1
-    }
+    this.wordsCount[word] > 0 ? this.wordsCount[word] ++ : this.wordsCount[word] = 1
     console.log(this.wordsCount)
+  }
+
+  computeWord(word: string): void {
+
   }
 
 }
