@@ -1,18 +1,18 @@
-import { isAlpha, isNumeric } from "./charTest";
+import { isAlpha, isNumeric, isPuntuation } from "./charTest";
 
-class Helper {
+export class Helper {
   text: string;
   letterCount: number;
   spaceCount: number;
   totalWords: number ;
-  words: [] | [string];
+  wordCounts: {[key: string]: number}; 
 
   constructor (text: string) {
     this.text = text;
     this.letterCount = 0
     this.spaceCount = 0
     this.totalWords = 0
-    this.words = []
+    this.wordCounts = {}
   }
 
   readText(): void {
@@ -26,8 +26,7 @@ class Helper {
     while (movingIndex <= stopValue) {
       
       const character = this.text[movingIndex]
-      console.log(`procesing character ${character}`)
-
+      // console.log(`checking ${character}`)
 
       if (character === ' ') {
         start ++
@@ -40,10 +39,9 @@ class Helper {
         this.letterCount ++
         movingIndex ++
         const nextChar = this.text[movingIndex]
-        if (nextChar !== ' ' && nextChar !== undefined ) continue
+        if (nextChar !== ' ' && nextChar !== undefined && !(isPuntuation(nextChar)) ) continue
         const wordFound = this.text.slice(start, movingIndex)
-        console.log(wordFound)
-        this.totalWords ++
+        this.computeWord(wordFound)
         start = movingIndex
         continue
       }
@@ -51,7 +49,12 @@ class Helper {
       if (isNumeric(character)) {
         movingIndex ++
         start = movingIndex
+        continue
       }
+
+      // in case of puntuation, \n and others
+      start ++
+      movingIndex ++
 
     }
   }
@@ -60,22 +63,31 @@ class Helper {
     console.log(`total n. of letters ${this.letterCount}`)
     console.log(`total n. of white spaces ${this.spaceCount}`)
     console.log(`total n. of words ${this.totalWords}`)
-    // console.log(`most common words ${JSON.stringify(this.wordsCount)}`)
+    console.log(`most common words ${JSON.stringify(this.wordCounts)}`)
+    // this.cleanWordCounts()
   }
 
-  // pushToWordCount(word: string): void {
-  //   this.wordsCount[word] > 0 ? this.wordsCount[word] ++ : this.wordsCount[word] = 1
-  // }
-
   computeWord(word: string): void {
+    this.totalWords ++
+    this.wordCounts[word] > 0 ? this.wordCounts[word] ++ : this.wordCounts[word] = 1
+  }
 
+  cleanWordCounts(): void {
+    const relevantWords = []
+    for (const key in this.wordCounts) {
+      if (this.wordCounts.hasOwnProperty(key)) {
+        const value = this.wordCounts[key];
+        console.log(`Key: ${key}, Value: ${value}`);
+      }
+    }    
   }
 
 }
 
-const helper = new Helper('this is my test test tosted test 4 rw')
-helper.readText()
-helper.printReport()
+// const helper = new Helper('this is my test!  test tosted. test 4 rw')
+// helper.readText()
+// helper.printReport()
+
 
 // MY TODO get input text A and B 
 // A if it is a file and B if it is url 
