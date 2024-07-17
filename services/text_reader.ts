@@ -1,4 +1,4 @@
-import { isAlpha, isNumeric, isPuntuation } from "./charTest";
+import { isAlpha, isPuntuation } from "./charTest";
 
 export class Helper {
   text: string;
@@ -26,14 +26,6 @@ export class Helper {
     while (movingIndex <= stopValue) {
       
       const character = this.text[movingIndex]
-      // console.log(`checking ${character}`)
-
-      if (character === ' ') {
-        start ++
-        this.spaceCount ++
-        movingIndex ++
-        continue
-      }
 
       if (isAlpha(character)) {
         this.letterCount ++
@@ -46,25 +38,22 @@ export class Helper {
         continue
       }
 
-      if (isNumeric(character)) {
-        movingIndex ++
-        start = movingIndex
-        continue
+      if (character === ' ') {
+        this.spaceCount ++
       }
 
-      // in case of puntuation, \n and others
-      start ++
       movingIndex ++
+      start = movingIndex
 
     }
   }
 
   printReport(): void {
+    const moreThanTen = this.filterCommonWords()
     console.log(`total n. of letters ${this.letterCount}`)
     console.log(`total n. of white spaces ${this.spaceCount}`)
     console.log(`total n. of words ${this.totalWords}`)
-    console.log(`most common words ${JSON.stringify(this.wordCounts)}`)
-    // this.cleanWordCounts()
+    console.log(`Words that repeat more than 10 times: ${JSON.stringify(moreThanTen)}`)
   }
 
   computeWord(word: string): void {
@@ -72,27 +61,13 @@ export class Helper {
     this.wordCounts[word] > 0 ? this.wordCounts[word] ++ : this.wordCounts[word] = 1
   }
 
-  cleanWordCounts(): void {
-    const relevantWords = []
-    for (const key in this.wordCounts) {
-      if (this.wordCounts.hasOwnProperty(key)) {
-        const value = this.wordCounts[key];
-        console.log(`Key: ${key}, Value: ${value}`);
-      }
-    }    
+  filterCommonWords(): {[key: string] : number} {
+    return Object.fromEntries(
+      Object.entries(this.wordCounts).filter(([ key, value]) => value > 10)
+    )
   }
 
 }
-
-// const helper = new Helper('this is my test!  test tosted. test 4 rw')
-// helper.readText()
-// helper.printReport()
-
-
-// MY TODO get input text A and B 
-// A if it is a file and B if it is url 
-
-
 
 // TODO il numero totale di parole          DONE !!
 // TODO il numero di lettere nel file       DONE !!
