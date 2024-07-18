@@ -3,10 +3,11 @@ import { readFile } from "./fileReader";
 
 
 async function main() {
-  const text = await readFile('./test.txt')
-  const helper = new Helper(text)
-  helper.readText();
-  helper.printReport();
+  const text = await readFile('./test.docx')
+  console.log(text)
+  // const helper = new Helper(text)
+  // helper.readText();
+  // helper.printReport();
 }
 
 main()
