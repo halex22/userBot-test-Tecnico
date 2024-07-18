@@ -1,12 +1,13 @@
 {
-    "compilerOptions": {
-      "target": "es2015",
-      "lib": ["es6", "dom"],
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "downlevelIteration": true
-    }
-  }
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true
+  },
+  "include": ["src", "__tests__"]
+}

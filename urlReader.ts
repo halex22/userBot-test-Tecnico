@@ -1,9 +1,6 @@
-import jsdom = require("jsdom");
-import { Helper } from "./services/textReader";
+import jsdom from "jsdom"
 
 const { JSDOM } = jsdom
-
-const urlTarget = 'https://en.wikipedia.org/wiki/Programming_language'
 
 export async function fetchHTML(url: string) {
   try {
@@ -33,16 +30,5 @@ export function extractTextFromHTML(sourceCode: string): string {
   })
 
   const text = document.querySelector('body')?.textContent
-  // const text = dom.window.document.querySelector('body')?.textContent
   return text ?? ''
 }
-
-// fetchHTML(urlTarget)
-//   .then(html => {
-//     // const sourceToClean = html ? html : '<body></body>' 
-//     const plainText = extractTextFromHTML(html)
-//     // console.log(plainText)
-//     const helper = new Helper(plainText)
-//     helper.readText()
-//     helper.printReport()
-//   })
