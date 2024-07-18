@@ -1,11 +1,11 @@
 import jsdom = require("jsdom");
-import { Helper } from "./services/text_reader";
+import { Helper } from "./services/textReader";
 
 const { JSDOM } = jsdom
 
 const urlTarget = 'https://en.wikipedia.org/wiki/Programming_language'
 
-async function fetchHTML(url: string) {
+export async function fetchHTML(url: string) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -19,7 +19,7 @@ async function fetchHTML(url: string) {
   }
 }
 
-function extractTextFromHTML(sourceCode: string): string {
+export function extractTextFromHTML(sourceCode: string): string {
 
   const dom = new JSDOM(sourceCode);
   const document = dom.window.document;
@@ -37,12 +37,12 @@ function extractTextFromHTML(sourceCode: string): string {
   return text ?? ''
 }
 
-fetchHTML(urlTarget)
-  .then(html => {
-    // const sourceToClean = html ? html : '<body></body>' 
-    const plainText = extractTextFromHTML(html)
-    // console.log(plainText)
-    const helper = new Helper(plainText)
-    helper.readText()
-    helper.printReport()
-  })
+// fetchHTML(urlTarget)
+//   .then(html => {
+//     // const sourceToClean = html ? html : '<body></body>' 
+//     const plainText = extractTextFromHTML(html)
+//     // console.log(plainText)
+//     const helper = new Helper(plainText)
+//     helper.readText()
+//     helper.printReport()
+//   })

@@ -1,38 +1,56 @@
 import { isAlpha, isPuntuation } from "./charTest";
 
+// Singleton design patter -- there can only be on Helper instance 
 export class Helper {
-  text: string;
+  private static instance: Helper;
+
+  // text: string;
   letterCount: number;
   spaceCount: number;
   totalWords: number ;
   wordCounts: {[key: string]: number}; 
 
-  constructor (text: string) {
-    this.text = text;
+  private constructor () {
+    // this.text = text;
     this.letterCount = 0
     this.spaceCount = 0
     this.totalWords = 0
     this.wordCounts = {}
   }
 
-  readText(): void {
-    if (this.text.length < 1) return
+  public static getInstance(): Helper {
+    if (!Helper.instance) {
+      Helper.instance =  new Helper();
+    }
+    return Helper.instance
+  }
+
+  resetAfterReading(): void {
+    this.wordCounts = {}
+    this.totalWords = 0
+    this.letterCount = 0
+    this.spaceCount = 0
+  }
+  
+
+  readText(textToRead: string): void {
+    if (textToRead.length < 1) return
 
     let start = 0
     let movingIndex = start  
 
-    const stopValue = this.text.length - 1 
+    const stopValue = textToRead.length - 1 
 
     while (movingIndex <= stopValue) {
       
-      const character = this.text[movingIndex]
+      const character = textToRead[movingIndex]
 
       if (isAlpha(character)) {
         this.letterCount ++
         movingIndex ++
-        const nextChar = this.text[movingIndex]
+        const nextChar = textToRead[movingIndex]
         if (nextChar !== ' ' && nextChar !== undefined && !(isPuntuation(nextChar)) ) continue
-        const wordFound = this.text.slice(start, movingIndex)
+        const wordFound = textToRead.slice(start, movingIndex)
         this.computeWord(wordFound)
         start = movingIndex
         continue
@@ -55,6 +73,18 @@ export class Helper {
     console.log(`total n. of words ${this.totalWords}`)
     console.log(`Words that repeat more than 10 times: ${JSON.stringify(moreThanTen)}`)
   }
+
+  getResult(): {} {
+    const filterdCommonWords = this.filterCommonWords()
+    const result = {
+      totalLetters: this.letterCount,
+      totalWords: this.totalWords,
+      totalSpaces: this.spaceCount,
+      moreThanTen: filterdCommonWords
+    }
+    this.resetAfterReading()
+    return result
+  } 
 
   computeWord(word: string): void {
     this.totalWords ++
